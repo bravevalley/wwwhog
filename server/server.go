@@ -43,14 +43,16 @@ func handleconn(conn net.Conn) {
 
 	_, err := conn.Read(b)
 	if err != nil {
-		log.Fatal("Failed to read data from connection")
+		log.Println("Failed to read data from connection")
+		return
 	}
 
 	query := strings.Fields(string(b))
 
 
 	if len(query) > 4 {
-		log.Fatalf("Wrong!") // TODO: Change later
+		log.Printf("%v: wrong query %v", conn.RemoteAddr().String(), strings.Join(query, " ")) // TODO: Change later
+		return
 	}
 
 
@@ -66,7 +68,7 @@ func handleconn(conn net.Conn) {
 			log.Fatal(err)
 		}
 
-		log.Printf("%s GET %v %v - success", conn.RemoteAddr(), un, hstnme)
+		log.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
 	case Keep_req:
 		var metadata = strings.ToLower(query[3])
 		hstnme = strings.ToLower(query[2])
@@ -75,7 +77,7 @@ func handleconn(conn net.Conn) {
 		if err != nil {
 			log.Fatal(err)
 		}
-		log.Printf("%s KEEP %v %v - success", conn.RemoteAddr(), hstnme, metadata)
+		log.Printf("%s KEEP %v %v - success", conn.RemoteAddr().String(), hstnme, metadata)
 	default:
 		log.Fatalf("Action \"%v\" unknown; kindly use GET or KEEP", request)
 
