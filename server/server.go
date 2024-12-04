@@ -1,11 +1,14 @@
 package server
 
 import (
+	"fmt"
 	"log"
 	"net"
 	"strings"
+	"strconv"
 
 	"com.go54/rbso/cmd"
+	"com.go54/rbso/log"
 )
 
 var (
@@ -20,15 +23,15 @@ func Startserver(port string) {
 	listener, err := net.Listen("tcp4", port)
 	
 	if err != nil {
-		log.Fatalf("Failed to start server: %v", err)
+		logah.ErrorLogger.Fatalf("Failed to start server: %v", err)
 	}
 	defer listener.Close()
-	log.Printf("Server listening on %s\n", port)
+	logah.InfoLogger.Printf("Server listening on %s\n", port)
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			log.Println("Couldn't accept connection")
+			logah.InfoLogger.Println("Couldn't accept connection")
 			continue
 		}
 		go handleconn(conn)
@@ -43,7 +46,7 @@ func handleconn(conn net.Conn) {
 
 	_, err := conn.Read(b)
 	if err != nil {
-		log.Println("Failed to read data from connection")
+		logah.ErrorLogger.Println("Failed to read data from connection")
 		return
 	}
 
@@ -52,7 +55,7 @@ func handleconn(conn net.Conn) {
 
 
 	if len(query) > 4 {
-		log.Printf("%v: wrong query %v", conn.RemoteAddr().String(), strings.Join(query, " ")) // TODO: Change later
+		logah.ErrorLogger.Printf("%v: wrong query %v", conn.RemoteAddr().String(), strings.Join(query, " ")) // TODO: Change later
 		return
 	}
 
@@ -66,21 +69,31 @@ func handleconn(conn net.Conn) {
 
 		out, err = cmd.Getlisting(un, hstnme)
 		if err != nil {
-			log.Fatal(err)
+			logah.ErrorLogger.Println(err)
+			out = fmt.Sprintln("Error: Get backup information")
+			break
 		}
 
-		log.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
+		if d, _ := strconv.Atoi(out); d < 1 {
+			out = fmt.Sprintln("No backup :(")
+			break
+		}
+
+		logah.InfoLogger.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
+		
 	case Keep_req:
 		var metadata = strings.ToLower(query[2])
 		hstnme = strings.ToLower(query[1])
 
 		out, err = cmd.Keepdata(hstnme, metadata)
 		if err != nil {
-			log.Fatal(err)
+			logah.ErrorLogger.Println(err)
+			out = fmt.Sprintf("Error: Couldn't move %v to host\n", metadata)
+			break
 		}
 		log.Printf("%s KEEP %v %v - success", conn.RemoteAddr().String(), hstnme, metadata)
 	default:
-		log.Fatalf("Action \"%v\" unknown; kindly use GET or KEEP", request)
+		logah.ErrorLogger.Println(err)
 
 	}
 
