@@ -12,7 +12,7 @@ import (
 // the user's available backup and a nil error if no error occured
 func Getlisting(username, hostname string) (string, error) {
 
-	cmd, err := exec.Command("/bin/bash", fmt.Sprintf("/usr/local/bin/fetch_backup.sh %v %v", username, hostname)).Output()
+	cmd, err := exec.Command("/usr/local/bin/fetch_backup.sh", username, hostname).Output()
 
 	log.Println(username, hostname)
 
