@@ -4,18 +4,20 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"os/exec"
 )
-
 
 // Getlisting takes the username and the server hostname and calls the server native script to retrieve
 // the user's available backup and a nil error if no error occured
 func Getlisting(username, hostname string) (string, error) {
 
-	cmd, err := exec.Command("/usr/local/bin/fetch_backup.sh", username, hostname).Output()
+	cmd, err := exec.Command("/bin/bash", fmt.Sprintf("/usr/local/bin/fetch_backup.sh %v %v", username, hostname)).Output()
+
+	log.Println(username, hostname)
 
 	if err != nil {
-		return "", fmt.Errorf("%s error: %v", "/usr/local/bin/fetch_backup.sh", err)
+		return "", fmt.Errorf("%s error: %v", "fetch_backup.sh", err)
 	}
 
 	prettyOut, err := PrettyString(string(cmd))
