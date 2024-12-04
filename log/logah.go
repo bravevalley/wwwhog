@@ -10,16 +10,18 @@ var (
 	ErrorLogger *log.Logger
 )
 
+
+
 // Initialize loggers
 func init() {
 	// Open or create the info log file
-	infoFile, err := os.OpenFile("/var/log/bk_info.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	infoFile, err := os.OpenFile("/var/log/bk_info.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatalf("Failed to open info log file: %v", err)
 	}
 
 	// Open or create the error log file
-	errorFile, err := os.OpenFile("/var/log/bk_error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	errorFile, err := os.OpenFile("/var/log/bk_error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
 	if err != nil {
 		log.Fatalf("Failed to open error log file: %v", err)
 	}
