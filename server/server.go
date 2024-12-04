@@ -58,10 +58,10 @@ func handleconn(conn net.Conn) {
 
 
 
-	switch request := strings.ToUpper(query[1]); request {
+	switch request := strings.ToUpper(query[0]); request {
 	case Get_req:
-		var un = strings.ToLower(query[2])
-		hstnme = strings.ToLower(query[3])
+		var un = strings.ToLower(query[1])
+		hstnme = strings.ToLower(query[2])
 
 		out, err = cmd.Getlisting(un, hstnme)
 		if err != nil {
@@ -70,8 +70,8 @@ func handleconn(conn net.Conn) {
 
 		log.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
 	case Keep_req:
-		var metadata = strings.ToLower(query[3])
-		hstnme = strings.ToLower(query[2])
+		var metadata = strings.ToLower(query[2])
+		hstnme = strings.ToLower(query[1])
 
 		out, err = cmd.Keepdata(hstnme, metadata)
 		if err != nil {

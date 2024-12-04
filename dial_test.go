@@ -17,7 +17,7 @@ func TestServer(t *testing.T) {
 
 	var dyla net.Dialer
 
-	conn, err := dyla.DialContext(ctx, "tcp", "131.153.147.50::40411")
+	conn, err := dyla.DialContext(ctx, "tcp", "131.153.147.50:40411")
 	if err != nil {
 		t.Fatal(err)
 	}
