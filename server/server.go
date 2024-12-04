@@ -17,7 +17,7 @@ var (
 
 // Startserver starts the server and listens on the specified port
 func Startserver(port string) {
-	listener, err := net.Listen("tcp", port)
+	listener, err := net.Listen("tcp4", port)
 	
 	if err != nil {
 		log.Fatalf("Failed to start server: %v", err)
