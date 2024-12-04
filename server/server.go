@@ -39,7 +39,7 @@ func Startserver(port string) {
 func handleconn(conn net.Conn) {
 	defer conn.Close()
 
-	b := make([]byte, 1024)
+	b := make([]byte, 64)
 
 	_, err := conn.Read(b)
 	if err != nil {
@@ -47,7 +47,8 @@ func handleconn(conn net.Conn) {
 		return
 	}
 
-	query := strings.Fields(string(b))
+	cleanedStr := strings.Trim(string(b), "\x00")
+	query := strings.Split(cleanedStr, " ")
 
 
 	if len(query) > 4 {
