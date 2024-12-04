@@ -20,6 +20,8 @@ var (
 
 func main() {
 
+
+
 	if len(os.Args) > 4 {
 		log.Fatalf("Wrong!") // TODO: Change later
 	}
