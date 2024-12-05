@@ -4,6 +4,7 @@ import (
 	"context"
 	"fmt"
 	"net"
+	"strings"
 	"testing"
 	"time"
 )
@@ -29,9 +30,10 @@ func TestServer(t *testing.T) {
 		t.Logf("Write operation failed: %v", err)
 	}
 
-	b := make([]byte, 1 << 14)
+	b := make([]byte, 1536)
 	conn.Read(b)
 
-	fmt.Println(string(b))
+	dt := strings.Trim(string(b), "\x00")
+	fmt.Printf("%q, %d", dt, len(dt))
 
 }

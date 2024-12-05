@@ -6,7 +6,6 @@ import (
 	"fmt"
 	"os/exec"
 
-	"com.go54/rbso/log"
 )
 
 
@@ -17,7 +16,7 @@ func Getlisting(username, hostname string) (string, error) {
 	cmd, err := exec.Command("/usr/local/bin/fetch_backup.sh", username, hostname).Output()
 
     if err != nil {
-        logah.Logger.Println(err)
+        return "", err
     }
 
 	prettyOut, err := PrettyString(string(cmd))
