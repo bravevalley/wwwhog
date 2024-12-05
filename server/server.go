@@ -23,15 +23,15 @@ func Startserver(port string) {
 	listener, err := net.Listen("tcp4", port)
 	
 	if err != nil {
-		logah.ErrorLogger.Fatalf("Failed to start server: %v", err)
+		logah.Logger.Fatalf("Failed to start server: %v", err)
 	}
 	defer listener.Close()
-	logah.InfoLogger.Printf("Server listening on %s\n", port)
+	logah.Logger.Printf("Server listening on %s\n", port)
 
 	for {
 		conn, err := listener.Accept()
 		if err != nil {
-			logah.InfoLogger.Println("Couldn't accept connection")
+			logah.Logger.Println("Couldn't accept connection")
 			continue
 		}
 		go handleconn(conn)
@@ -46,7 +46,7 @@ func handleconn(conn net.Conn) {
 
 	_, err := conn.Read(b)
 	if err != nil {
-		logah.ErrorLogger.Println("Failed to read data from connection")
+		logah.Logger.Println("Failed to read data from connection")
 		return
 	}
 
@@ -55,7 +55,7 @@ func handleconn(conn net.Conn) {
 
 
 	if len(query) > 4 {
-		logah.ErrorLogger.Printf("%v: wrong query %v", conn.RemoteAddr().String(), strings.Join(query, " ")) // TODO: Change later
+		logah.Logger.Printf("%v: wrong query %v", conn.RemoteAddr().String(), strings.Join(query, " ")) // TODO: Change later
 		return
 	}
 
@@ -69,7 +69,7 @@ func handleconn(conn net.Conn) {
 
 		out, err = cmd.Getlisting(un, hstnme)
 		if err != nil {
-			logah.ErrorLogger.Println(err)
+			logah.Logger.Println(err)
 			out = fmt.Sprintln("Error: Get backup information")
 			break
 		}
@@ -79,21 +79,21 @@ func handleconn(conn net.Conn) {
 			break
 		}
 
-		logah.InfoLogger.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
-		
+		logah.Logger.Printf("%s GET %v %v - success", conn.RemoteAddr().String(), un, hstnme)
+
 	case Keep_req:
 		var metadata = strings.ToLower(query[2])
 		hstnme = strings.ToLower(query[1])
 
 		out, err = cmd.Keepdata(hstnme, metadata)
 		if err != nil {
-			logah.ErrorLogger.Println(err)
+			logah.Logger.Println(err)
 			out = fmt.Sprintf("Error: Couldn't move %v to host\n", metadata)
 			break
 		}
 		log.Printf("%s KEEP %v %v - success", conn.RemoteAddr().String(), hstnme, metadata)
 	default:
-		logah.ErrorLogger.Println(err)
+		logah.Logger.Println(err)
 
 	}
 

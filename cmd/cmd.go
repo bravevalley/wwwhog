@@ -9,6 +9,7 @@ import (
 	"com.go54/rbso/log"
 )
 
+
 // Getlisting takes the username and the server hostname and calls the server native script to retrieve
 // the user's available backup and a nil error if no error occured
 func Getlisting(username, hostname string) (string, error) {
@@ -16,7 +17,7 @@ func Getlisting(username, hostname string) (string, error) {
 	cmd, err := exec.Command("/usr/local/bin/fetch_backup.sh", username, hostname).Output()
 
     if err != nil {
-        logah.ErrorLogger.Println(err)
+        logah.Logger.Println(err)
     }
 
 	prettyOut, err := PrettyString(string(cmd))

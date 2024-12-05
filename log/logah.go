@@ -6,27 +6,17 @@ import (
 )
 
 var (
-	InfoLogger  *log.Logger
-	ErrorLogger *log.Logger
+	Logger *log.Logger
 )
 
-
-
-// Initialize loggers
+// Initialize the logger
 func init() {
-	// Open or create the info log file
-	infoFile, err := os.OpenFile("/var/log/bk_info.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
+	// Open or create the log file
+	logFile, err := os.OpenFile("application.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
 	if err != nil {
-		log.Fatalf("Failed to open info log file: %v", err)
+		log.Fatalf("Failed to open log file: %v", err)
 	}
 
-	// Open or create the error log file
-	errorFile, err := os.OpenFile("/var/log/bk_error.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0666)
-	if err != nil {
-		log.Fatalf("Failed to open error log file: %v", err)
-	}
-
-	// Initialize the loggers
-	InfoLogger = log.New(infoFile, "INFO: ", log.Ldate|log.Ltime|log.Lshortfile)
-	ErrorLogger = log.New(errorFile, "ERROR: ", log.Ldate|log.Ltime|log.Lshortfile)
+	// Create a new logger instance
+	Logger = log.New(logFile, "LOG: ", log.Ldate|log.Ltime|log.Lshortfile)
 }

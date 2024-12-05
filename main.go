@@ -1,7 +1,6 @@
 package main
 
 import (
-
 	"com.go54/rbso/server"
 )
 
@@ -11,5 +10,5 @@ import (
 func main() {
 
 	server.Startserver(":40411")
-	
+
 }
