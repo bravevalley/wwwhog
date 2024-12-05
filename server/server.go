@@ -5,7 +5,6 @@ import (
 	"log"
 	"net"
 	"strings"
-	"strconv"
 
 	"com.go54/rbso/cmd"
 	"com.go54/rbso/log"
@@ -74,7 +73,7 @@ func handleconn(conn net.Conn) {
 			break
 		}
 
-		if d, _ := strconv.Atoi(out); d < 1 {
+		if out == "-1" {
 			out = fmt.Sprintln("No backup :(")
 			logah.Logger.Printf("%s GET %v %v - no backup", conn.RemoteAddr().String(), un, hstnme)
 			break
