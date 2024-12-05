@@ -24,7 +24,7 @@ func TestServer(t *testing.T) {
 	
 	defer conn.Close()
 
-	_, err = conn.Write([]byte("get gloinve shark"))
+	_, err = conn.Write([]byte("get mubeenn1 shark"))
 	if err != nil {
 		t.Logf("Write operation failed: %v", err)
 	}

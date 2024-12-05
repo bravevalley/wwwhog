@@ -2,7 +2,6 @@ package server
 
 import (
 	"fmt"
-	"log"
 	"net"
 	"strings"
 
@@ -41,7 +40,7 @@ func Startserver(port string) {
 func handleconn(conn net.Conn) {
 	defer conn.Close()
 
-	b := make([]byte, 64)
+	b := make([]byte, 512)
 
 	_, err := conn.Read(b)
 	if err != nil {
@@ -91,7 +90,8 @@ func handleconn(conn net.Conn) {
 			out = fmt.Sprintf("Error: Couldn't move %v to host\n", metadata)
 			break
 		}
-		log.Printf("%s KEEP %v %v - success", conn.RemoteAddr().String(), hstnme, metadata)
+
+		logah.Logger.Printf("%s KEEP %v %v - success", conn.RemoteAddr().String(), hstnme, metadata)
 	default:
 		logah.Logger.Println(err)
 
