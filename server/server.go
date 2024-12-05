@@ -76,6 +76,7 @@ func handleconn(conn net.Conn) {
 
 		if d, _ := strconv.Atoi(out); d < 1 {
 			out = fmt.Sprintln("No backup :(")
+			logah.Logger.Printf("%s GET %v %v - no backup", conn.RemoteAddr().String(), un, hstnme)
 			break
 		}
 
