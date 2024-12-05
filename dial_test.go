@@ -34,6 +34,9 @@ func TestServer(t *testing.T) {
 	conn.Read(b)
 
 	dt := strings.Trim(string(b), "\x00")
+
+	dt = strings.Trim(string(dt), "\n")
+
 	fmt.Printf("%q, %d", dt, len(dt))
 
 }

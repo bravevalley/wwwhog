@@ -97,5 +97,7 @@ func handleconn(conn net.Conn) {
 
 	}
 
-	conn.Write([]byte(out))
+	dt := strings.Trim(out, "\n")
+
+	conn.Write([]byte(dt))
 }
